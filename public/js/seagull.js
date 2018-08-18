@@ -64,4 +64,27 @@ const seagull = (pos) => {
 	return that;
 }
 
+const foo = () => {
+	const that = traitHolder();
+
+	traits.addEntityTrait({
+		pos,
+		size: vec(0, 0),
+	})(that);
+
+	traits.addSpriteTrait({
+		img: "seagull-foo",
+		imgSize: vec(5, 5),
+		drawSize: vec(5, 5),
+	})(that);
+
+	that.remove = ({ world: { remove }, context }) => {
+		if(that.pos.x + 5 < -context.x) remove(that);
+	}
+
+	that.addMethods("remove");
+
+	return that;
+}
+
 export default seagull;

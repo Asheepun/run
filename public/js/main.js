@@ -8,6 +8,7 @@ import * as text				from "/js/lib/text.js";
 import player				    from "/js/player.js";
 import * as obstacles			from "/js/obstacles.js";
 import spawnHandler 			from "/js/spawnHandler.js";
+import cloudHandler				from "/js/cloud.js";
 
 Promise.all([
 	createCanvas(320, 180),
@@ -31,6 +32,7 @@ Promise.all([
 		"edge",
 		"seagull",
 		"flying-seagull",
+		"cloud",
 	),
 	loaders.loadJSON(
 		"playerFrames",
@@ -75,7 +77,6 @@ Promise.all([
 		GAME.world.add(player(vec(80, 140)), "player", 6, true);
 
 		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
-
 
 		GAME.state = "level";
 	}
