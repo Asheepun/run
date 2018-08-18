@@ -13,16 +13,28 @@ Promise.all([
 	createCanvas(320, 180),
 	loaders.loadSprites(
 		"player1",
+		"bwplayer1",
+		"rock",
 		"extra/dashing",
+		"dashing",
 		"coin",
 		"diamond",
 		"dust",
 		"stardust",
 		"rock",
+		"sand",
 		"background",
+		"waves",
+		"bar",
+		"concrete",
+		"box",
+		"edge",
+		"seagull",
+		"flying-seagull",
 	),
 	loaders.loadJSON(
 		"playerFrames",
+		"seagullFrames",
 	)
 ]).then(([ { c, ctx, width, height, pointer, scale }, sprites, JSON ]) => {
 
@@ -52,7 +64,8 @@ Promise.all([
 
 	GAME.states.setupLevel = () => {
 
-		GAME.context = vec(0, 0)
+		GAME.context = vec(0, 0);
+		GAME.paralax = vec(0, 0);
 		GAME.speed = 3;
 		GAME.points = 0;
 
@@ -67,6 +80,7 @@ Promise.all([
 		GAME.state = "level";
 	}
 
+	let paralaxPos = 0;
 	GAME.states.level = () => {
 
 		if(GAME.keys.W.down || GAME.keys.w.down || GAME.keys[" "].down || (GAME.pointer.downed && GAME.pointer.pos.x < GAME.width/2)) 
@@ -77,18 +91,27 @@ Promise.all([
 
 		GAME.world.update(GAME);
 
+		if(GAME.world.player.velocity.x > 0) GAME.paralax.x += 1;
 		GAME.context.x = -GAME.world.player.pos.x + 80;
 		GAME.context.y = 0;
 		GAME.context = v.add(GAME.context, GAME.screenShake);
+
+		if(GAME.paralax.x + 320 < -GAME.context.x) GAME.paralax.x += 320;
 		
 		ctx.save();
 		ctx.scale(GAME.c.scale, GAME.c.scale);
 		ctx.translate(GAME.context.x, GAME.context.y);
 		ctx.drawImage(GAME.sprites.background, -GAME.context.x, 0, 320, 180);
 
+		ctx.drawImage(GAME.sprites.waves, Math.floor(GAME.paralax.x), 100, 320, 80);
+		ctx.drawImage(GAME.sprites.waves, Math.floor(GAME.paralax.x) + 320, 100, 320, 80);
+
 		GAME.world.draw(ctx, GAME.sprites);
 
 		text.white10(GAME.points, 310 - GAME.context.x - (GAME.points + "").length * 5, 15, ctx);
+
+		ctx.fillStyle = "red";
+		//ctx.fillRect(GAME.world.player.pos.x, GAME.world.player.pos.y, GAME.world.player.size.x, GAME.world.player.size.y);
 
 		ctx.restore();
 		GAME.screenShake = vec(0, 0);

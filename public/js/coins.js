@@ -78,11 +78,6 @@ export const diamond = (pos) => {
 		img: "diamond",
 	});
 
-	that.slowDown = (GAME) => {
-	}
-
-	that.addMethods("slowDown");
-
 	return that;
 }
 

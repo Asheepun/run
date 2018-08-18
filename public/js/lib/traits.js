@@ -137,7 +137,7 @@ export const addMoveTrait = ({ velocity = vec(0, 0), canMove = true, obstacleTyp
         that.pos.x += that.velocity.x;
         if(that.handleOubX) oub = that.checkOub();
         if(oub) that.handleOubX(GAME);
-        if(that.handleColY){
+        if(that.handleColX){
             obstacleTypes.forEach(obstacleType => {
                 if(!col && GAME.world[obstacleType]) col = checkSetCol(that, GAME.world[obstacleType]);
             });
@@ -192,11 +192,11 @@ export const addSpriteTrait = ({ color, img, alpha = 1, rotation = 0, visible = 
     that.draw = (ctx, sprites) => {
         if(that.visible){
             ctx.save();
-            ctx.translate(that.center.x, that.center.y);
+            ctx.translate(Math.round(that.center.x), Math.round(that.center.y));
             ctx.rotate(that.rotation);
             ctx.globalAlpha = that.alpha;
             ctx.fillStyle = that.color;
-            if(that.color) ctx.fillRect(-that.size.x/2, -that.size.y/2, that.size.x, that.size.y);
+            if(that.color) ctx.fillRect(Math.round(-that.size.x/2), Math.round(-that.size.y/2), that.size.x, that.size.y);
             if(that.img){
 				ctx.scale(that.facing.x, that.facing.y);
 				ctx.drawImage(

@@ -7,13 +7,13 @@ const player = (pos) => {
 	
 	traits.addEntityTrait({
 		pos,
-		size: vec(10, 12),
+		size: vec(16, 12),
 	})(that);
 
 	traits.addSpriteTrait({
 		img: "player1",
 		imgSize: vec(10, 14),
-		drawOffset: vec(0, -2),
+		drawOffset: vec(4, -2),
 		drawSize: vec(10, 14),
 	})(that);
 
@@ -73,8 +73,8 @@ const player = (pos) => {
 		if(stepCounter <= 0 && that.onGround){
 			for(let i = 0; i < Math.random()*3; i++){
 				add(particles.dust({
-					pos: vec(that.pos.x, that.pos.y + that.size.y - 5),
-					velocity: vec(Math.random()*0.3, -Math.random()),
+					pos: vec(that.pos.x +  Math.random()*3, that.pos.y + that.size.y - 5 - Math.random()*2),
+					velocity: vec(Math.random(), -Math.random()),
 				}), "particles", 4)
 				stepCounter += Math.random()*5 + 3;
 			}
@@ -124,8 +124,14 @@ const player = (pos) => {
 				alpha: 0.9,
 				fade: 0.1,
 			}), "particles", 4);
+			for(let i = 0; i < Math.random()*0; i++){
+				GAME.world.add(particles.dust({
+					pos: vec(that.center.x, that.pos.y + that.size.y/4 + Math.random()*(that.size.y/2-1)),
+					velocity: vec(-Math.random(), -Math.random()*0.4-0.3),
+				}), "particles", 3);
+			}
 			GAME.screenShake.y += shake;
-			GAME.screenShake.x += 10;
+			GAME.screenShake.x += 5;
 			shake *= -1;
 		}
 		if(!that.dashing && that.onGround) that.canDash = true;

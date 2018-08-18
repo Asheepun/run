@@ -29,13 +29,13 @@ const obstacle = ({ pos, size, img, color }) => {
 export const ground = (pos) => obstacle({
 	pos,
 	size: vec(20, 20),
-	color: "grey",
+	img: "concrete",
 });
 
-export const rock = (pos) => obstacle({
+export const box = (pos) => obstacle({
 	pos,
 	size: vec(20, 20),
-	color: "grey",
+	img: "box",
 });
 
 export const bumper = (pos) => {
@@ -60,3 +60,14 @@ export const bumper = (pos) => {
 	return that;
 }
 
+export const edge = (pos, imgPos) => {
+	const that = obstacle({
+		pos,
+		size: vec(20, 20),
+		img: "edge",
+	});
+
+	that.imgPos = imgPos;
+
+	return that;
+}

@@ -2,6 +2,7 @@ import vec, * as v 				from "/js/lib/vector.js";
 import traitHolder, * as traits from "/js/lib/traits.js";
 import * as obstacles 			from "/js/obstacles.js";
 import * as coins				from "/js/coins.js";
+import seagull					from "/js/seagull.js";
 
 const startScreen = [
 	"................",
@@ -185,7 +186,18 @@ const spawnHandler = () => {
 		screen.forEach((row, y) => strEach(row, (tile, x) => {
 			pos = vec(x * 20 + screensPlaced * width, y * 20);
 
-			if(tile === "#") add(obstacles.rock(pos.copy()), "obstacles", 2);
+			if(tile === "#"){
+				if(y === 8){
+					if(screen[y][x+1] !== "#" && screen[y][x-1] !== "#")
+						add(obstacles.edge(pos.copy(), vec(21, 0)), "obstacles", 2);
+					else if(screen[y][x+1] !== "#" && x !== screen[0].length-1)
+						add(obstacles.edge(pos.copy(), vec(42, 0)), "obstacles", 2);
+					else if(screen[y][x-1] !== "#" && x !== 0)
+						add(obstacles.edge(pos.copy(), vec(0, 0)), "obstacles", 2);
+					else add(obstacles.ground(pos.copy()), "obstacles", 2);
+				}
+				else add(obstacles.box(pos.copy()), "obstacles", 2);
+			}
 			if(tile === "B") add(obstacles.bumper(pos.copy()), "bumpers", 2);
 			if(tile === "$") add(coins.smallCoin(pos.copy()), "coins", 4);
 			if(tile === "£") add(coins.diamond(pos.copy()), "coins", 4);
@@ -199,7 +211,6 @@ const spawnHandler = () => {
 		if(!init){
 			that.addScreen(startScreen, width, add);
 			that.addScreen(getScreen(flats), width, add);
-		console.log(world.obstacles)
 			init = true;
 		}
 	}
@@ -230,6 +241,11 @@ const spawnHandler = () => {
 
 			that.addScreen(screen, width, add);
 			lastPlayerPos = player.pos.x
+			//add nice looking things
+			for(let i = 0; i < Math.random()*2; i++){
+				add(seagull(vec(-context.x + width * 1.5 + Math.random()*width/2, 0)), "particles", 3);
+			}
+
 		}
 	}
 

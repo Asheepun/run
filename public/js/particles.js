@@ -1,7 +1,6 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v				from "/js/lib/vector.js";
 
-
 const particle = ({ img, pos, size, velocity, acceleration, gravity }) => {
 	const that = traitHolder();
 
@@ -12,7 +11,7 @@ const particle = ({ img, pos, size, velocity, acceleration, gravity }) => {
 
 	traits.addSpriteTrait({
 		img,
-		imgSize: size,
+		imgSize: size.copy(),
 	})(that);
 
 	traits.addMoveTrait({
@@ -59,17 +58,22 @@ export const dust = ({ pos, velocity }) => {
 		acceleration: vec(0, 0),
 		gravity: 0,
 	});
+	that.imgSize = vec(5, 5);
 
 	traits.addColTrait({
 		bounce: true,
 	})(that);
 
+	let shrinkage;
 	that.shrink = ({ world: { remove } }) => {
-		that.size.x -= Math.random()*0.2;
-		that.size.y -= Math.random()*0.2;
-		that.drawSize.x -= Math.random()*0.2;
-		that.drawSize.y -= Math.random()*0.2;
-		if(that.size.x < 0 || that.size.y < 0) remove(that);
+		that.velocity.x *= 0.97;
+		that.velocity.y *= 0.97;
+		shrinkage = Math.random()*0.2;
+		that.size.x -= shrinkage;
+		that.size.y -= shrinkage;
+		that.drawSize.x -= shrinkage;
+		that.drawSize.y -= shrinkage;
+		if(that.size.x < 1 || that.size.y < 1) remove(that);
 	}
 
 	let rotation = Math.random()*0.5 - 0.25;
