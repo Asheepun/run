@@ -55,11 +55,26 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
         e.preventDefault();
     });
 
+	const touch = {
+		downed: false,
+		pos: vec(0, 0),
+	}
+
+	c.addEventListener("touchstart", (e) => {
+		touch.downed = true;
+        touch.pos = div(sub(vec(e.touches[0].pageX, e.touches[0].pageY), offset), c.scale);
+	});
+
+	touch.update = () => {
+		touch.downed = false;
+	}
+
     element.appendChild(c);
     resolve({
         c,
         ctx,
         pointer,
+		touch,
         width,
         height,
 		scale: c.scale,
