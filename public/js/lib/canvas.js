@@ -23,7 +23,6 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
 		ctx.imageSmoothingEnabled = false;
     }
     reSize();
-	console.log(ctx.imageSmoothingEnabled);
 
     window.addEventListener("resize", reSize);
 
@@ -62,6 +61,7 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
 
 	c.addEventListener("touchstart", (e) => {
 		touch.downed = true;
+        const offset = vec(c.offsetLeft, c.offsetTop);
         touch.pos = div(sub(vec(e.touches[0].pageX, e.touches[0].pageY), offset), c.scale);
 	});
 
