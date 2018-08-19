@@ -38,7 +38,7 @@ Promise.all([
 		"playerFrames",
 		"seagullFrames",
 	)
-]).then(([ { c, ctx, width, height, pointer, scale }, sprites, JSON ]) => {
+]).then(([ { c, ctx, width, height, pointer, touch, scale }, sprites, JSON ]) => {
 
 	const GAME = {
 		c,
