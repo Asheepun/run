@@ -59,14 +59,14 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
 	c.addEventListener("touchstart", (e) => {
         const offset = vec(c.offsetLeft, c.offsetTop);
 
-		e.changedTouches.forEach(touch => touches.push({
+		e.touches.forEach(touch => touches.push({
 			idx: touch.identifier,
 			pos: div(sub(vec(e.touch.pageX, e.touch.pageY), offset), c.scale),
 		}));
 	});
 
 	c.addEventListener("touchend", (e) => {
-		e.changedTouches.forEach((touch) => {
+		e.touches.forEach((touch) => {
 			touches.forEach((existingTouch, i) => {
 				if(touch.identifier === existingTouch.idx) touches.splice(i, 0);
 			});
