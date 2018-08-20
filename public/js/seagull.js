@@ -42,8 +42,10 @@ const seagull = (pos) => {
 
 	that.flying = false;
 
-	that.checkPlayer = ({ world: { player } }) => {
+	that.checkPlayer = ({ world: { player, add} }) => {
 		if(v.sub(that.center, player.center).mag < 60 && player.pos.y < that.pos.y){
+			if(!that.flying && Math.random() < 0.5) add(foo(vec(that.pos.x, that.pos.y + that.size.y)), "particles", 3);
+
 			that.flying = true;
 			that.velocity = vec(-Math.random() * 2 - 2, -Math.random() * 1.5 -1);
 			that.acceleration.y = -0.001;
@@ -64,7 +66,7 @@ const seagull = (pos) => {
 	return that;
 }
 
-const foo = () => {
+const foo = (pos) => {
 	const that = traitHolder();
 
 	traits.addEntityTrait({

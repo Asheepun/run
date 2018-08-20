@@ -54,27 +54,31 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
         e.preventDefault();
     });
 
-	const touch = {
-		downed: false,
-		pos: vec(0, 0),
-	}
+	const touches = [];
 
 	c.addEventListener("touchstart", (e) => {
-		touch.downed = true;
         const offset = vec(c.offsetLeft, c.offsetTop);
-        touch.pos = div(sub(vec(e.touches[0].pageX, e.touches[0].pageY), offset), c.scale);
+
+		e.changedTouches.forEach(touch => touches.push({
+			idx: touch.identifier,
+			pos: div(sub(vec(e.touch.pageX, e.touch.pageY), offset), c.scale),
+		}));
 	});
 
-	touch.update = () => {
-		touch.downed = false;
-	}
+	c.addEventListener("touchend", (e) => {
+		e.changedTouches.forEach((touch) => {
+			touches.forEach((existingTouch, i) => {
+				if(touch.identifier === existingTouch.idx) touches.splice(i, 0);
+			});
+		});
+	});
 
     element.appendChild(c);
     resolve({
         c,
         ctx,
         pointer,
-		touch,
+		touches,
         width,
         height,
 		scale: c.scale,

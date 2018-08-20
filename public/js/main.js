@@ -31,14 +31,14 @@ Promise.all([
 		"box",
 		"edge",
 		"seagull",
-		"flying-seagull",
+		"seagull-foo",
 		"cloud",
 	),
 	loaders.loadJSON(
 		"playerFrames",
 		"seagullFrames",
 	)
-]).then(([ { c, ctx, width, height, pointer, touch, scale }, sprites, JSON ]) => {
+]).then(([ { c, ctx, width, height, pointer, touches, scale }, sprites, JSON ]) => {
 
 	const GAME = {
 		c,
@@ -46,7 +46,7 @@ Promise.all([
 		width,
 		height,
 		pointer,
-		touch,
+		touches,
 		sprites,
 		JSON,
 		world: gameWorld(),
@@ -85,11 +85,19 @@ Promise.all([
 	let paralaxPos = 0;
 	GAME.states.level = () => {
 
-		if(GAME.keys.W.down || GAME.keys.w.down || GAME.keys[" "].down || (GAME.touch.downed && GAME.touch.pos.x < GAME.width/2)) 
+		if(GAME.keys.W.down || GAME.keys.w.down || GAME.keys[" "].down) 
 			GAME.world.player.jump(GAME);
 
-		if(GAME.keys.o.downed || GAME.keys.O.downed || (GAME.touch.downed && GAME.touch.pos.x > GAME.width/2))
+		if(GAME.keys.o.downed || GAME.keys.O.downed)
 			GAME.world.player.dash(GAME);
+
+		GAME.touches.forEach((touch) => {
+			if(touch.pos < GAME.width / 2)
+				GAME.world.player.jump(GAME);
+			else
+				GAME.world.player.dash(GAME);
+		});
+
 
 		GAME.world.update(GAME);
 
@@ -146,7 +154,6 @@ Promise.all([
 				GAME.states[GAME.state](GAME, GAME.ctx);
 				GAME.keys.update();
 				GAME.pointer.update();
-				GAME.touch.update();
 			}
 			accTime -= 1000/60;
 		}
